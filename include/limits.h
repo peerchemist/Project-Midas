@@ -1,3 +1,10 @@
+#ifndef TARGET_N64
+/* Use hosted limits for the PC port, including glibc multibyte limits. */
+#include_next <limits.h>
+/* The original game also gets floating-point limits from this header. */
+#include <float.h>
+#else
+
 #ifndef _LIMITS_H
 #define _LIMITS_H
 
@@ -302,3 +309,5 @@ extern "C"
 #endif
 #endif /* !__LIMITS_H__ */
 #endif
+
+#endif /* TARGET_N64 */

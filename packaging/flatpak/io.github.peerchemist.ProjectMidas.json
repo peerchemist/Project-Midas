@@ -1,0 +1,78 @@
+{
+  "app-id": "io.github.peerchemist.ProjectMidas",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "26.08",
+  "sdk": "org.freedesktop.Sdk",
+  "sdk-extensions": [
+    "org.freedesktop.Sdk.Compat.i386",
+    "org.freedesktop.Sdk.Extension.toolchain-i386"
+  ],
+  "command": "midas",
+  "finish-args": [
+    "--allow=multiarch",
+    "--share=ipc",
+    "--socket=x11",
+    "--socket=pulseaudio",
+    "--device=all"
+  ],
+  "add-extensions": {
+    "org.freedesktop.Platform.Compat.i386": {
+      "directory": "lib/i386-linux-gnu",
+      "version": "26.08"
+    },
+    "org.freedesktop.Platform.GL32": {
+      "directory": "lib/i386-linux-gnu/GL",
+      "version": "1.4",
+      "versions": "26.08;1.4",
+      "subdirectories": true,
+      "no-autodownload": true,
+      "autodelete": false,
+      "add-ld-path": "lib",
+      "merge-dirs": "vulkan/icd.d;glvnd/egl_vendor.d;egl/egl_external_platform.d;OpenCL/vendors;lib/dri;lib/d3d;lib/gbm;vulkan/explicit_layer.d;vulkan/implicit_layer.d",
+      "download-if": "active-gl-driver",
+      "enable-if": "active-gl-driver",
+      "autoprune-unless": "active-gl-driver"
+    }
+  },
+  "modules": [
+    {
+      "name": "project-midas",
+      "buildsystem": "simple",
+      "build-options": {
+        "prepend-path": "/usr/lib/sdk/toolchain-i386/bin",
+        "prepend-pkg-config-path": "/usr/lib/i386-linux-gnu/pkgconfig",
+        "env": {
+          "CC": "i686-unknown-linux-gnu-gcc",
+          "CXX": "i686-unknown-linux-gnu-g++",
+          "TERM": "dumb"
+        }
+      },
+      "build-commands": [
+        "echo 'abe01e4aeb033b6c0836819f549c791b26cfde83  baserom.u.z64' | sha1sum -c -",
+        "bash scripts/extract_baserom.u.sh",
+        "make convert_props convert_chrs convert_guns combine_images",
+        "cmake -S . -B _flatpak_build -DCMAKE_BUILD_TYPE=Release -DGE_VIDEO=ON -DGE_ROMDATA_FALLBACK=OFF -DSDL2_LINUX_ROOT=/usr -DCMAKE_SKIP_RPATH=ON",
+        "cmake --build _flatpak_build -j${FLATPAK_BUILDER_N_JOBS}",
+        "install -Dm755 _flatpak_build/ProjectMidas /app/libexec/ProjectMidas",
+        "install -Dm755 packaging/flatpak/midas /app/bin/midas",
+        "install -Dm644 packaging/flatpak/midas.ini /app/share/midas/midas.ini",
+        "install -Dm644 baserom.u.z64 /app/share/midas/baserom.u.z64",
+        "install -Dm644 tools/gamecontrollerdb.txt tools/gamecontrollerdefault.txt tools/midas_ini_help.txt -t /app/share/midas/",
+        "install -Dm644 tools/shaders_base.txt tools/Data_README.txt -t /app/share/midas/",
+        "install -Dm644 packaging/flatpak/ld.so.conf /app/etc/ld.so.conf",
+        "mkdir -p /app/lib/i386-linux-gnu/GL",
+        "install -Dm644 packaging/flatpak/io.github.peerchemist.ProjectMidas.desktop /app/share/applications/io.github.peerchemist.ProjectMidas.desktop",
+        "install -Dm644 packaging/flatpak/io.github.peerchemist.ProjectMidas.metainfo.xml /app/share/metainfo/io.github.peerchemist.ProjectMidas.metainfo.xml",
+        "install -Dm644 packaging/flatpak/io.github.peerchemist.ProjectMidas.png /app/share/icons/hicolor/256x256/apps/io.github.peerchemist.ProjectMidas.png",
+        "install -Dm644 LICENSE tools/THIRD_PARTY_NOTICES.txt -t /app/share/licenses/io.github.peerchemist.ProjectMidas/"
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "../..",
+          "skip": [".git", ".agents", ".codex", ".aws", ".flatpak-builder", "build_flatpak", "flatpak-repo", "releases", "build_pc", "build_win", "build_deck", "build_linux", "third_party", "*.flatpak", "*.v64", "*.n64"]
+        }
+      ]
+    }
+  ]
+}

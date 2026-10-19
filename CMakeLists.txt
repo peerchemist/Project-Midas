@@ -7,6 +7,18 @@ project(ge007 C)
 
 set(CMAKE_C_STANDARD 11)
 
+# GCC 14+ promotes legacy C pointer/conversion diagnostics to errors. The
+# decompiled code still needs them treated as warnings, including asset TUs.
+set(PORT_LEGACY_C_FLAGS)
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 14)
+    set(PORT_LEGACY_C_FLAGS -Wno-error=incompatible-pointer-types
+                            -Wno-error=int-conversion
+                            -Wno-error=implicit-function-declaration)
+    foreach(flag IN LISTS PORT_LEGACY_C_FLAGS)
+        add_compile_options($<$<COMPILE_LANGUAGE:C>:${flag}>)
+    endforeach()
+endif()
+
 add_compile_options(
     -m32
     # Use SSE scalar floats so every operation rounds to single precision like
@@ -174,6 +186,7 @@ set(GU_SRC
 # Known caveats: bg .c interior point tables, ANIM_DATA_* streams and
 # oddtextures texel data are big-endian blobs.
 set(ASSET_C_FLAGS
+    -std=gnu11 ${PORT_LEGACY_C_FLAGS}
     -m32 -malign-data=abi
     -fms-extensions -ffreestanding -fno-strict-aliasing -fwrapv -funsigned-char
     -fno-common -fno-zero-initialized-in-bss -fno-toplevel-reorder -fno-pic

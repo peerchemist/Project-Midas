@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.peerchemist.ProjectMidas</id>
+  <name>Project Midas</name>
+  <summary>Play the GoldenEye 007 PC port</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LicenseRef-proprietary</project_license>
+  <description>
+    <p>Project Midas is a work-in-progress PC port of GoldenEye 007,
+    built from the Nintendo 64 decompilation, with keyboard, mouse and
+    controller support.</p>
+    <p>This personal build includes the stock USA cartridge image supplied
+    during packaging, ready to play after installation.</p>
+  </description>
+  <launchable type="desktop-id">io.github.peerchemist.ProjectMidas.desktop</launchable>
+  <url type="homepage">https://github.com/peerchemist/Project-Midas</url>
+  <content_rating type="oars-1.1"/>
+</component>

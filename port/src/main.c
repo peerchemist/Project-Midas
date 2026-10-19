@@ -590,6 +590,18 @@ static void portInitRootDir(const char *argv0)
 {
     int last = -1;
     int i;
+#ifndef _WIN32
+    /* Sandboxed packages keep saves and settings outside the read-only exe. */
+    const char *dataDir = getenv("GE_DATA_DIR");
+    if (dataDir != NULL && dataDir[0] == '/') {
+        int len = snprintf(sPortRootDir, sizeof(sPortRootDir), "%s%s", dataDir,
+                           dataDir[strlen(dataDir) - 1] == '/' ? "" : "/");
+        if (len > 0 && (size_t) len < sizeof(sPortRootDir)) {
+            portConLogf("ge: root: %s\n", sPortRootDir);
+            return;
+        }
+    }
+#endif
 #ifdef _WIN32
     /* authoritative on Windows regardless of how we were launched */
     DWORD n = GetModuleFileNameA(NULL, sPortRootDir, sizeof(sPortRootDir) - 1);

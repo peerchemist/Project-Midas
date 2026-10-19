@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Project Midas
+Comment=Play the GoldenEye 007 PC port with your own USA cartridge image
+Exec=midas %f
+Icon=io.github.peerchemist.ProjectMidas
+Terminal=false
+Categories=Game;ActionGame;
+Keywords=GoldenEye;007;FPS;

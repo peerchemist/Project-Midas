@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+
+export GE_DATA_DIR="${XDG_DATA_HOME:?}/midas"
+export GE_ROM="${GE_ROM:-/app/share/midas/baserom.u.z64}"
+mkdir -p "$GE_DATA_DIR/Data"
+if [ ! -e "$GE_DATA_DIR/midas.ini" ]; then
+    cp /app/share/midas/midas.ini "$GE_DATA_DIR/midas.ini"
+fi
+for name in gamecontrollerdb.txt gamecontrollerdefault.txt midas_ini_help.txt; do
+    cp "/app/share/midas/$name" "$GE_DATA_DIR/$name"
+done
+cp /app/share/midas/shaders_base.txt "$GE_DATA_DIR/Data/shaders_base.txt"
+cp /app/share/midas/Data_README.txt "$GE_DATA_DIR/Data/README.txt"
+cd "$GE_DATA_DIR"
+exec /app/libexec/ProjectMidas "$@"

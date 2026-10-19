@@ -37,6 +37,11 @@ An older `ge.ini` is renamed to `midas.ini` automatically on first run.
 
 ## Building
 
+For a Linux Flatpak using Freedesktop SDK 26.08, see
+[the Flatpak instructions](packaging/flatpak/README.md). With the SDK and
+extensions installed and `baserom.u.z64` in the repository root, run
+`./scripts/build_flatpak.sh` to create `ProjectMidas.flatpak`.
+
 The build runs in Docker, which has every tool and library both builds need. You also need the GE (USA) cart as `baserom.u.z64` in the repository root:
 
 ```
@@ -51,7 +56,7 @@ The commands below are for a Linux shell. On Windows, run them in WSL:
 2. Open the Ubuntu terminal and clone the repository inside WSL, not under `/mnt/c` (much faster):
    ```
    cd ~
-   git clone https://github.com/murkantor/Project-Midas.git
+   git clone https://github.com/peerchemist/Project-Midas.git
    cd Project-Midas
    ```
 3. Copy your cart in, for example from your Windows Downloads folder:
